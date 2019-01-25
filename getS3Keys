@@ -1,0 +1,19 @@
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+
+exports.handler = async (event) => {
+  const allKeys = [];
+  await getKeys({ Bucket: 'audios-bucket123' }, allKeys);
+  return allKeys;
+};
+
+async function getKeys(params, keys){
+  const response = await s3.listObjectsV2(params).promise();
+  response.Contents.forEach(obj => keys.push(obj.Key));
+
+  if (response.IsTruncated) {
+    const newParams = Object.assign({}, params);
+    newParams.ContinuationToken = response.NextContinuationToken;
+    await getKeys(newParams, keys); // RECURSIVE CALL
+  }
+}
