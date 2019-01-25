@@ -1,3 +1,5 @@
+// Based on
+// https://stackoverflow.com/questions/42394429/aws-sdk-s3-best-way-to-list-all-keys-with-listobjectsv2
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
